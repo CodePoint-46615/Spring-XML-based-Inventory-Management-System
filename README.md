@@ -21,6 +21,19 @@
 ✅ Spring configuration handled **entirely through XML** (no Spring Boot).
 
 ---
+```plaintext
+Product-Inventory-Manager/
+│
+├── backend/
+│   ├── src/main/java/com/example/demo/
+│   │   ├── api/                # REST-like endpoints (ProductAPI)
+│   │   ├── entity/             # Entities (Product, ProductCategory)
+│   │   ├── repository/         # In-memory repository logic
+│   │   └── service/            # Business service layer
+│   ├── src/main/resources/
+│   │   ├── ApplicationContext.xml  # Spring XML configuration
+│   │   └── application.properties  # Basic app properties
+│  
 
 ## 🏗️ Project Structure
 Product-Inventory-Manager/
