@@ -1,4 +1,4 @@
-# 🧾 Product Inventory Manager v1
+# 🧾 Product Inventory Manager
 
 [![Java](https://img.shields.io/badge/Java-17-blue?logo=java)](https://www.oracle.com/java/)
 [![Spring Framework](https://img.shields.io/badge/Spring-Framework-green?logo=spring)](https://spring.io/projects/spring-framework)
