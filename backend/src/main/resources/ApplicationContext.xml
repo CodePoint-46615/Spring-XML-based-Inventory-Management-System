@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- Enable annotation support and JSON converters -->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="objectMapper"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!-- Jackson JavaTimeModule bean -->
+    <bean id="javaTimeModule" class="com.fasterxml.jackson.datatype.jsr310.JavaTimeModule"/>
+
+    <!-- Create ObjectMapper instance -->
+    <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
+
+    <!-- Register JavaTimeModule with ObjectMapper -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="objectMapper"/>
+        <property name="targetMethod" value="registerModule"/>
+        <property name="arguments">
+            <list>
+                <ref bean="javaTimeModule"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Your beans -->
+    <bean id="productRepository" class="com.example.demo.repository.ProductRepository"/>
+
+    <bean id="productService" class="com.example.demo.service.ProductService">
+        <constructor-arg ref="productRepository"/>
+    </bean>
+
+    <bean id="productAPI" class="com.example.demo.api.ProductAPI">
+        <constructor-arg ref="productService"/>
+    </bean>
+
+    <!-- Enable CORS for htdocs access -->
+    <mvc:cors>
+        <mvc:mapping path="/api/**"
+                     allowed-origins="*"
+                     allowed-methods="GET,POST,PUT,DELETE"
+                     allowed-headers="*"/>
+    </mvc:cors>
+
+    <!-- Required for CORS -->
+    <bean id="corsFilter" class="org.springframework.web.filter.CorsFilter">
+        <constructor-arg>
+            <bean class="org.springframework.web.cors.UrlBasedCorsConfigurationSource">
+                <property name="corsConfigurations">
+                    <map>
+                        <entry key="/api/**">
+                            <bean class="org.springframework.web.cors.CorsConfiguration">
+                                <property name="allowedOrigins" value="*"/>
+                                <property name="allowedMethods" value="GET,POST,PUT,DELETE"/>
+                                <property name="allowedHeaders" value="*"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+</beans>
